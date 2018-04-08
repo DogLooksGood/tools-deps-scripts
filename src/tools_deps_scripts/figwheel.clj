@@ -12,7 +12,6 @@
 ;; 2. A figwheel.edn file
 ;; {:all-builds []}
 
-
 (try (require '[figwheel-sidecar.repl-api
                 :as figwheel
                 :refer [start-figwheel! cljs-repl]])
@@ -39,11 +38,11 @@
     (when (.exists fig-edn-file)
       (edn/read-string (slurp fig-edn-file)))))
 
-(def fig-config
+(defn fig-config [args]
   (merge {:figwheel-options figwheel-options}
          (if fig-edn
            fig-edn
-           (let [arg-map         (apply hash-map *command-line-args*)
+           (let [arg-map         (apply hash-map args)
                  output-to       (get arg-map ":output-to" "target/main.js")
                  output-dir      (get arg-map ":output-dir" (str/replace output-to #"\.js" ""))
                  main            (symbol (get arg-map ":main"))
@@ -57,4 +56,7 @@
                             :source-paths ["src/main/cljs"]
                             :compiler     compiler-config}]}))))
 
-(start-figwheel! fig-config)
+(defn -main [& args]
+  (-> args
+      fig-config
+      start-figwheel!))
