@@ -1,7 +1,7 @@
 (ns tools-deps-scripts.figwheel
   (:require [clojure.string :as str]
             [clojure.java.io :as io]
-            [clojure.edn]))
+            [clojure.edn :as edn]))
 
 ;;;; Figwheel script
 ;; Two ways to configure, they effect in order:
